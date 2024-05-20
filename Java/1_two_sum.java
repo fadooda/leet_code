@@ -1,28 +1,19 @@
-import java.lang.reflect.Array;
+import java.util.HashMap;
+
 class Solution {
     public int[] twoSum(int[] nums, int target) {
-    	HashMap<Integer, Integer> hmap = new HashMap<Integer, Integer>();
-    	int x=0;
-    	for(int elm : nums)
-    	{
-    		hmap.put(elm,x);
-    		x++;
-    	}
-        for (int i=0; i<nums.length;i++)
-        {
-            Integer numtarg=target-nums[i];
-            System.out.println(numtarg);
-            //int index=hmap.get(numtarg);
-            if(hmap.get(numtarg) != null)
-            {
-                if (hmap.containsKey(numtarg) && i!=hmap.get(numtarg))
-                {
-                    int[] randomArray = {i,hmap.get(numtarg)};
-                    return randomArray;
-                }
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        for (int i = 0; i < nums.length; i++) {
+            int complement = target - nums[i]; 
+            
+            if (map.containsKey(complement)) {
+                return new int[]{map.get(complement), i}; // Found pair
             }
+
+            map.put(nums[i], i); // Store number and index
         }
-        int[] randomArray = {0,0};
-        return randomArray; 
+
+        return new int[]{};
     }
 }
