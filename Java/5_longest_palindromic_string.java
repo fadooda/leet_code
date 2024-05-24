@@ -1,47 +1,30 @@
+import java.util.Arrays;
+
 class Solution {
     public String longestPalindrome(String s) {
-        //possible to use hash map for faster index processing *also there could be alot of index collisions*...
-        String longestPal="";
-        for(int i=0; i<s.length(); i++)
-        {
-            int nextchar=s.length();
-            boolean foundPal=false;
-           // int nextind=s.length();
-            while (i!=nextchar && foundPal==false)
-            {
-                nextchar=s.lastIndexOf(s.charAt(i),nextchar-1);
-                //System.out.println(nextchar);  
-                //nextind=nextchar-1;
-                //nextind++;
-                if(nextchar!=-1)
-                {
-                    //System.out.println(nextchar);  
-                    String orig= s.substring(i,nextchar+1);
-                    //System.out.println(orig);   
-                    String checkPal = new StringBuilder(orig).reverse().toString();
-                   // System.out.println(checkPal);
-                    if (orig.equals(checkPal))
-                    {
-                        foundPal=true;
-                        //System.out.println(checkPal
-                        //System.out.println(checkPal);
-                        longestPal=(longestPal.length() < checkPal.length() )? checkPal: longestPal;
-                        //System.out.println(longestPal);
-                    }
-                }
-               // break;
-            }
-            
+        // Edge case: If string is empty, return empty string.
+        if (s == null || s.length() == 0) {
+            return "";
         }
-        if (longestPal.length()==0)
-        {
-            if(s.length()==0)
-            {
-                return s;
-            }
-            Character test = s.charAt(0);
-            return test.toString();
+
+    }
+
+    // Adds boundaries ('|') between characters and at the start/end
+    private char[] addBoundaries(char[] cs) {
+        if (cs == null || cs.length == 0) {
+            return "||".toCharArray();
         }
-         return longestPal; 
+
+        char[] cs2 = new char[cs.length * 2 + 1];
+        for (int i = 0; i < cs2.length - 1; i += 2) {
+            cs2[i] = '|'; // Boundary character
+            cs2[i + 1] = cs[i / 2]; // Original character
+        }
+        cs2[cs2.length - 1] = '|'; // Ending boundary
+        return cs2;
+    }
+
+    // Removes boundary characters from the final extracted palindrome
+    private char[] removeBoundaries(char[] cs) {
     }
 }
