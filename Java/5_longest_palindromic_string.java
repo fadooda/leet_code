@@ -26,5 +26,14 @@ class Solution {
 
     // Removes boundary characters from the final extracted palindrome
     private char[] removeBoundaries(char[] cs) {
+        if (cs == null || cs.length < 3) {
+            return "".toCharArray();
+        }
+
+        char[] cs2 = new char[(cs.length - 1) / 2];
+        for (int i = 0; i < cs2.length; i++) {
+            cs2[i] = cs[i * 2 + 1]; // Skip boundaries
+        }
+        return cs2;
     }
 }
