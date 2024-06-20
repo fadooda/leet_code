@@ -1,40 +1,28 @@
-import java.util.*;
-
 class Solution {
     public List<Integer> postorderTraversal(TreeNode root) {
-        List<Integer> result = new ArrayList<>();
-        if (root == null) return result; // Edge case: Empty tree
+        List<Integer> postorderNodes = new ArrayList<>();
+        if (root == null) return postorderNodes; // Edge case: Empty tree
 
-        Set<TreeNode> visited = new HashSet<>(); // Track visited nodes
-
-        while (root != null) {  
-            TreeNode deepest = getDeepestUnvisitedNode(root, visited);
-            if (deepest == null) break; // If no more nodes, exit
-            
-            result.add(deepest.val); // Add node in postorder
-            visited.add(deepest); // Mark node as visited
-        }
-        return result;
-    }
-
-    // Helper function to find the deepest unvisited node
-    private TreeNode getDeepestUnvisitedNode(TreeNode node, Set<TreeNode> visited) {
         Stack<TreeNode> stack = new Stack<>();
-        stack.push(node);
-        TreeNode last = null;
+        TreeNode lastVisited = null;
+        TreeNode current = root;
 
-        while (!stack.isEmpty()) {
-            TreeNode current = stack.pop();
-
-            // Only return the deepest unvisited node
-            if (!visited.contains(current)) {
-                last = current;
+        while (current != null || !stack.isEmpty()) {
+            if (current != null) {
+                stack.push(current);
+                current = current.left; // Go as deep left as possible
+            } else {
+                TreeNode peekNode = stack.peek();
+                // Process the right child if it exists and hasn't been visited yet
+                if (peekNode.right != null && peekNode.right != lastVisited) {
+                    current = peekNode.right;
+                } else {
+                    postorderNodes.add(peekNode.val);
+                    lastVisited = stack.pop();
+                }
             }
-
-            // Push right before left (simulate postorder)
-            if (current.right != null) stack.push(current.right);
-            if (current.left != null) stack.push(current.left);
         }
-        return last;
+
+        return postorderNodes;
     }
 }
