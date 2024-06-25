@@ -5,36 +5,30 @@ class Solution {
         List<Integer> result = new ArrayList<>();
         if (s.length() < p.length()) return result;
 
-        // Generate all permutations of p
-        Set<String> permutations = new HashSet<>();
-        generatePermutations("", p, permutations);
+        int[] pCount = new int[26];
+        int[] sCount = new int[26];
 
-        // Check each substring of s
-        for (int i = 0; i <= s.length() - p.length(); i++) {
-            String sub = s.substring(i, i + p.length());
-            if (permutations.contains(sub)) {
-                result.add(i);
+        for (int i = 0; i < p.length(); i++) {
+            pCount[p.charAt(i) - 'a']++;
+            sCount[s.charAt(i) - 'a']++;
+        }
+
+        if (Arrays.equals(pCount, sCount)) result.add(0);
+
+        for (int i = p.length(); i < s.length(); i++) {
+            sCount[s.charAt(i) - 'a']++;  // Add new character to window
+            sCount[s.charAt(i - p.length()) - 'a']--;  // Remove old character
+
+            if (Arrays.equals(pCount, sCount)) {
+                result.add(i - p.length() + 1);
             }
         }
 
         return result;
     }
 
-    // Recursive function to generate all permutations
-    private void generatePermutations(String prefix, String remaining, Set<String> permutations) {
-        if (remaining.length() == 0) {
-            permutations.add(prefix);
-            return;
-        }
-        for (int i = 0; i < remaining.length(); i++) {
-            generatePermutations(prefix + remaining.charAt(i), 
-                                 remaining.substring(0, i) + remaining.substring(i + 1), 
-                                 permutations);
-        }
-    }
-
-    public static void main(String[] args) {
-        Solution solution = new Solution();
-        System.out.println(solution.findAnagrams("cbaebabacd", "abc")); // Output: [0, 6]
-    }
-}
+//     public static void main(String[] args) {
+//         Solution solution = new Solution();
+//         System.out.println(solution.findAnagrams("cbaebabacd", "abc")); // Output: [0, 6]
+//     }
+// }
