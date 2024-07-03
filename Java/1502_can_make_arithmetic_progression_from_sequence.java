@@ -1,25 +1,32 @@
-import java.util.Arrays;
+import java.util.HashSet;
 
 class Solution {
     public boolean canMakeArithmeticProgression(int[] arr) {
-        // If there's less than 2 elements, we can't form an arithmetic progression
-        if (arr.length < 2) return false; 
-        
-        // Sort the array in ascending order using Arrays.sort()
-        // This uses Timsort (O(N log N) in worst/average case, O(N) in best case for nearly sorted data)
-        Arrays.sort(arr);
+        int n = arr.length;
+        if (n < 2) return false;
 
-        // Calculate the common difference of the arithmetic progression
-        int diff = arr[1] - arr[0];
+        int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
+        HashSet<Integer> set = new HashSet<>();
 
-        // Iterate through the sorted array to check if every pair has the same difference
-        for (int i = 2; i < arr.length; i++) {
-            if (arr[i] - arr[i - 1] != diff) {
-                return false; // If any difference is not equal to `diff`, it's not an AP
+        // Find min, max and store elements in HashSet
+        for (int num : arr) {
+            min = Math.min(min, num);
+            max = Math.max(max, num);
+            set.add(num);
+        }
+
+        // Check if (max - min) is perfectly divisible by (n - 1)
+        if ((max - min) % (n - 1) != 0) return false;
+
+        int diff = (max - min) / (n - 1);
+
+        // Check if all expected elements exist in HashSet
+        for (int i = 0; i < n; i++) {
+            if (!set.contains(min + i * diff)) {
+                return false;
             }
         }
-        
-        // If all differences match, return true (it's an AP)
+
         return true;
     }
 }
