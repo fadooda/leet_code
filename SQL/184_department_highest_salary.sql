@@ -1,7 +1,13 @@
-/* Write your MySQL query statement below*/
-select dep.Name as "Department", emp.Name as "Employee", emp.Salary
+# Write your MySQL query statement below
+/* cte below dense (keeping ties) ranks all salaries decending order and partitioned(grouped by) emp.departmentId*/
+ with cte as (
+    select emp.departmentId , emp.Name, emp.Salary,
+dense_rank() over (partition by emp.departmentId order by emp.salary desc) as rn
 from Employee emp
+ )
+ select dep.Name as "Department",  cte.Name as "Employee", cte.Salary
+from cte
 inner join Department dep
-on emp.DepartmentId = dep.id
-where emp.Salary in (select max(e.salary) from Employee e where e.DepartmentId =  dep.id group by e.DepartmentId); /*subquery gets the max salary for each department id group */
+on cte.departmentId = dep.id
+where cte.rn=1 /* selects all ranks that are top salary in the department */
 
